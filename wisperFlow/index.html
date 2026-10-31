@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voice Controlled Fun Generator</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            text-align: center;
+        }
+        .card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            max-width: 500px;
+            width: 90%;
+        }
+        h1 {
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+        #output {
+            font-size: 20px;
+            min-height: 80px;
+            margin-bottom: 25px;
+            line-height: 1.5;
+        }
+        .btn {
+            background-color: #ffc107;
+            border: none;
+            color: #333;
+            padding: 12px 25px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: 0.3s;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        .btn:hover {
+            background-color: #ffb300;
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <h1>🎭 वॉइस कंट्रोल्ड जोक्स और कोट्स</h1>
+        <div id="output">माइक बटन दबाएं और बोलें!</div>
+        <button class="btn" onclick="startListening()">🎤 बोलकर बदलें</button>
+    </div>
+
+    <script>
+        const messages = [
+            "सफलता एक दिन में नहीं मिलती, लेकिन ठान लो तो एक दिन जरूर मिलती है! 🚀",
+            "पूरी कोडिंग बिना हाथ के करना अपने आप में एक सुपरपावर है! 🤖",
+            "क्यों डरें कि ज़िन्दगी में क्या होगा, हर वक्त क्यों सोचें कि बुरा होगा? बढ़ते रहें मंज़िलों की ओर!",
+            "टीचर- 'बताओ पानी का सूत्र क्या है?' छात्र- 'सर, H2O!' टीचर- 'बहुत अच्छे, अगर प्यास लगे तो क्या पियोगे?' छात्र- 'सर, O2O! 😂'"
+        ];
+
+        function startListening() {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            if (!SpeechRecognition) {
+                alert("आपका ब्राउज़र वॉइस रिकग्निशन सपोर्ट नहीं करता है। कृपया गूगल क्रोम का उपयोग करें।");
+                return;
+            }
+
+            const recognition = new SpeechRecognition();
+            recognition.lang = 'hi-IN'; // हिंदी या इंग्लिश समझने के लिए
+            document.getElementById("output").innerText = "सुन रहा हूँ... बोलिए!";
+
+            recognition.onresult = function(event) {
+                const speechResult = event.results[0][0].transcript;
+                // किसी भी आवाज़ पर नया जोक या कोट दिखा देगा
+                generateContent();
+            };
+
+            recognition.onerror = function() {
+                document.getElementById("output").innerText = "आवाज़ सुनाई नहीं दी, कृपया दोबारा कोशिश करें।";
+            };
+
+            recognition.start();
+        }
+
+        function generateContent() {
+            const randomIndex = Math.floor(Math.random() * messages.length);
+            document.getElementById("output").innerText = messages[randomIndex];
+        }
+    </script>
+
+</body>
+</html>
